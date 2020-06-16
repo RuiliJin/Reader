@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -47,6 +48,7 @@ public class RexiaoFragment extends Fragment implements Runnable, AdapterView.On
     Handler handler;
     View view;
     ListView RexiaoView;
+    private String[] href;
     public RexiaoFragment() {
         // Required empty public constructor
     }
@@ -77,7 +79,11 @@ public class RexiaoFragment extends Fragment implements Runnable, AdapterView.On
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        Intent reading = new Intent(getActivity(),ReadingActivity.class);
+        reading.putExtra("href",href[position]);
+        startActivity(reading);
 
     }
 
@@ -142,13 +148,14 @@ public class RexiaoFragment extends Fragment implements Runnable, AdapterView.On
                     Log.i(TAG, "run:book" + str1 );
                     retList.add(str1);
                 }
-                /*Elements href = books.select("a[href]");
-                String[] el = new String[href.size()];
-                    for (int i = 0; i < href.size(); i += 1) {
-                        Element td2 = book.get(i);
-                        el[i] = td2.text();
-                        Log.i(TAG, "run:href" + el[i] );
-                    }*/
+                Elements elements = books.select("a");
+                href=new String[elements.size()];
+                for(int i = 0; i < elements.size(); i += 1){
+                        Element element = elements.get(i);
+                        href[i] =element .attr("href");
+                        Log.i(TAG, "run:element" + elements.attr("href"));
+                        Log.i(TAG, "run:href" + href[i]);
+                    }
 
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();

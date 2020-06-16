@@ -2,6 +2,7 @@ package com.swufe.reader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,8 @@ public class XinShuFragment extends Fragment implements Runnable, AdapterView.On
     Handler handler;
     View view;
     ListView XinshuView;
+    private String[] href;
+
     public XinShuFragment() {
         // Required empty public constructor
     }
@@ -64,6 +67,9 @@ public class XinShuFragment extends Fragment implements Runnable, AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent reading = new Intent(getActivity(),ReadingActivity.class);
+        reading.putExtra("href",href[position]);
+        startActivity(reading);
 
     }
 
@@ -125,6 +131,15 @@ public class XinShuFragment extends Fragment implements Runnable, AdapterView.On
                 String str1 = td1.text();
                 Log.i(TAG, "run:" + str1 );
                 retList.add(str1);
+            }
+
+            Elements elements = books.select("a");
+            href=new String[elements.size()];
+            for(int i = 0; i < elements.size(); i += 1){
+                Element element = elements.get(i);
+                href[i] =element .attr("href");
+                Log.i(TAG, "run:element" + elements.attr("href"));
+                Log.i(TAG, "run:href" + href[i]);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

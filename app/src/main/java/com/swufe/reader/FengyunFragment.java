@@ -2,6 +2,7 @@ package com.swufe.reader;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class FengyunFragment extends Fragment implements Runnable, AdapterView.O
     Handler handler;
     View view;
     ListView FengyunView;
+    private String[] href;
 
     public FengyunFragment() {
         // Required empty public constructor
@@ -68,6 +70,9 @@ public class FengyunFragment extends Fragment implements Runnable, AdapterView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent reading = new Intent(getActivity(),ReadingActivity.class);
+        reading.putExtra("href",href[position]);
+        startActivity(reading);
 
     }
 
@@ -129,6 +134,15 @@ public class FengyunFragment extends Fragment implements Runnable, AdapterView.O
                 String str1 = td1.text();
                 Log.i(TAG, "run:" + str1 );
                 retList.add(str1);
+            }
+
+            Elements elements = books.select("a");
+            href=new String[elements.size()];
+            for(int i = 0; i < elements.size(); i += 1){
+                Element element = elements.get(i);
+                href[i] =element .attr("href");
+                Log.i(TAG, "run:element" + elements.attr("href"));
+                Log.i(TAG, "run:href" + href[i]);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
